@@ -374,7 +374,7 @@ class KeyboardViewController: UIInputViewController {
     private func updateColorsRecursively(in view: UIView, keyColor: UIColor, specialKeyColor: UIColor, textColor: UIColor) {
         if let button = view as? UIButton {
             if let title = button.currentTitle {
-                if title == "⇧" || title == "⌫" || title == "🌐" || title == "space" || title == "return" {
+                if title == "⇧" || title == "⌫" || title == "🌐" || title == "space" || title == "return" || title == "ABC" || title == "1/2" || title == "2/2" || title == "!#1" {
                     button.backgroundColor = specialKeyColor
                 } else {
                     button.backgroundColor = keyColor

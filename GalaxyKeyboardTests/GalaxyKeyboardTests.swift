@@ -1,14 +1,14 @@
 //
-//  GalaxyKyabordTests.swift
-//  GalaxyKyabordTests
+//  GalaxyKeyboardTests.swift
+//  GalaxyKeyboardTests
 //
 //  Created by Nodari L on 18.01.26.
 //
 
 import Testing
-@testable import GalaxyKyabord
+@testable import GalaxyKeyboard
 
-struct GalaxyKyabordTests {
+struct GalaxyKeyboardTests {
 
     @Test func example() async throws {
         // Write your test here and use APIs like `#expect(...)` to check expected conditions.

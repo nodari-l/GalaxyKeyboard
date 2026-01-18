@@ -1,13 +1,13 @@
 //
-//  GalaxyKyabordUITestsLaunchTests.swift
-//  GalaxyKyabordUITests
+//  GalaxyKeyboardUITestsLaunchTests.swift
+//  GalaxyKeyboardUITests
 //
 //  Created by Nodari L on 18.01.26.
 //
 
 import XCTest
 
-final class GalaxyKyabordUITestsLaunchTests: XCTestCase {
+final class GalaxyKeyboardUITestsLaunchTests: XCTestCase {
 
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true
