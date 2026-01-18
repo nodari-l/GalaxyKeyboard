@@ -12,6 +12,27 @@ struct ContentView: View {
     @FocusState private var isTextFieldFocused: Bool
     
     var body: some View {
+        TabView {
+            HomeView(testText: $testText, isTextFieldFocused: $isTextFieldFocused)
+                .tabItem {
+                    Image(systemName: "house.fill")
+                    Text("Home")
+                }
+            
+            PrivacyPolicyView()
+                .tabItem {
+                    Image(systemName: "shield.fill")
+                    Text("Privacy")
+                }
+        }
+    }
+}
+
+struct HomeView: View {
+    @Binding var testText: String
+    @FocusState.Binding var isTextFieldFocused: Bool
+    
+    var body: some View {
         ScrollView {
             VStack(spacing: 24) {
                 VStack(spacing: 12) {
@@ -131,6 +152,130 @@ struct ContentView: View {
                 .padding(.bottom, 32)
             }
         }
+        .navigationTitle("Galaxy Keyboard")
+        .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
+struct PrivacyPolicyView: View {
+    var body: some View {
+        NavigationView {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 24) {
+                    VStack(spacing: 12) {
+                        Image(systemName: "shield.fill")
+                            .font(.system(size: 50))
+                            .foregroundColor(.green)
+                        
+                        Text("Privacy Policy")
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
+                        
+                        Text("Your privacy is our priority")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                            .multilineTextAlignment(.center)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.top, 20)
+                    
+                    Divider()
+                    
+                    VStack(alignment: .leading, spacing: 20) {
+                        PrivacySection(
+                            title: "Data Collection",
+                            icon: "doc.text.fill",
+                            items: [
+                                "**No personal data collected**: Galaxy Keyboard does not collect, store, or transmit any personal information",
+                                "**No typed text stored**: Your keyboard input is processed locally and never saved or transmitted",
+                                "**No analytics or tracking**: The app contains no analytics, crash reporting, or user tracking systems",
+                                "**No network access**: The keyboard does not connect to the internet or external servers"
+                            ]
+                        )
+                        
+                        PrivacySection(
+                            title: "Data Storage",
+                            icon: "internaldrive.fill",
+                            items: [
+                                "**Local processing only**: All keyboard functionality operates entirely on your device",
+                                "**No user preferences saved**: The app does not store user settings or preferences",
+                                "**No file storage**: No user data is written to device storage beyond standard iOS keyboard functionality",
+                                "**No cloud synchronization**: No data is synced to iCloud or other cloud services"
+                            ]
+                        )
+                        
+                        PrivacySection(
+                            title: "Permissions",
+                            icon: "checkmark.shield.fill",
+                            items: [
+                                "**No special permissions required**: The keyboard operates with standard iOS keyboard permissions only",
+                                "**Full Access not required**: The keyboard works without Full Access, though enabling it may improve performance",
+                                "**No camera, microphone, or location access**: The app does not request access to device sensors or location services",
+                                "**No contacts or calendar access**: The app does not access your contacts, calendar, or other personal data"
+                            ]
+                        )
+                        
+                        PrivacySection(
+                            title: "Third-Party Services",
+                            icon: "network",
+                            items: [
+                                "**No third-party integrations**: The app does not use any third-party services, SDKs, or frameworks that could collect data",
+                                "**No advertising**: The app contains no advertisements or advertising networks",
+                                "**No external dependencies**: All functionality is built using standard iOS frameworks only"
+                            ]
+                        )
+                        
+                        PrivacySection(
+                            title: "Contact Information",
+                            icon: "envelope.fill",
+                            items: [
+                                "**Questions about privacy**: Contact the developer through the App Store if you have privacy-related questions",
+                            ]
+                        )
+                    }
+                }
+                .padding(.horizontal)
+                .padding(.bottom, 32)
+            }
+            .navigationTitle("Privacy Policy")
+            .navigationBarTitleDisplayMode(.inline)
+        }
+    }
+}
+
+struct PrivacySection: View {
+    let title: String
+    let icon: String
+    let items: [String]
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(spacing: 12) {
+                Image(systemName: icon)
+                    .foregroundColor(.blue)
+                    .font(.system(size: 20))
+                
+                Text(title)
+                    .font(.title2)
+                    .fontWeight(.bold)
+            }
+            
+            VStack(alignment: .leading, spacing: 8) {
+                ForEach(items, id: \.self) { item in
+                    HStack(alignment: .top, spacing: 8) {
+                        Text("•")
+                            .foregroundColor(.blue)
+                            .font(.system(size: 16, weight: .bold))
+                        
+                        Text(LocalizedStringKey(item))
+                            .font(.subheadline)
+                            .foregroundColor(.primary)
+                    }
+                }
+            }
+            .padding(.leading, 32)
+        }
+        .padding(.vertical, 8)
     }
 }
 
