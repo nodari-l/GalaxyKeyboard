@@ -112,18 +112,30 @@ class KeyboardViewController: UIInputViewController {
         stackView.axis = .horizontal
         stackView.spacing = 4
         
-        let nextKeyboardButton = createSpecialButton(title: "🌐", action: #selector(handleInputModeList(from:with:)))
-        nextKeyboardButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
-        nextKeyboardButton.isHidden = !needsInputModeSwitchKey
+        let symbolButton = createKeyButton(title: "!#1", action: #selector(symbolKeyPressed(_:)))
+        symbolButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
+        
+        let commaButton = createKeyButton(title: ",", action: #selector(punctuationKeyPressed(_:)))
+        commaButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
         
         let spaceButton = createSpecialButton(title: "space", action: #selector(spacePressed))
+        
+        let dotButton = createKeyButton(title: ".", action: #selector(punctuationKeyPressed(_:)))
+        dotButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
         
         let returnButton = createSpecialButton(title: "return", action: #selector(returnPressed))
         returnButton.widthAnchor.constraint(equalToConstant: 80).isActive = true
         
-        stackView.addArrangedSubview(nextKeyboardButton)
+        let nextKeyboardButton = createSpecialButton(title: "🌐", action: #selector(handleInputModeList(from:with:)))
+        nextKeyboardButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        nextKeyboardButton.isHidden = !needsInputModeSwitchKey
+        
+        stackView.addArrangedSubview(symbolButton)
+        stackView.addArrangedSubview(commaButton)
         stackView.addArrangedSubview(spaceButton)
+        stackView.addArrangedSubview(dotButton)
         stackView.addArrangedSubview(returnButton)
+        stackView.addArrangedSubview(nextKeyboardButton)
         
         return stackView
     }
@@ -198,6 +210,17 @@ class KeyboardViewController: UIInputViewController {
     
     @objc private func returnPressed() {
         textDocumentProxy.insertText("\n")
+    }
+    
+    @objc private func symbolKeyPressed(_ sender: UIButton) {
+        // For now, just insert the text as is. This could be expanded to switch to a symbols keyboard
+        guard let title = sender.currentTitle else { return }
+        textDocumentProxy.insertText(title)
+    }
+    
+    @objc private func punctuationKeyPressed(_ sender: UIButton) {
+        guard let title = sender.currentTitle else { return }
+        textDocumentProxy.insertText(title)
     }
     
     private func updateShiftState() {
