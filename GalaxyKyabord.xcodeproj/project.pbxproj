@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		C197F3392F1D65A400B215FB /* GalaxyKeyboard.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = C197F3322F1D65A400B215FB /* GalaxyKeyboard.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		C197F3122F1D658D00B215FB /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -21,13 +25,45 @@
 			remoteGlobalIDString = C197F3032F1D658C00B215FB;
 			remoteInfo = GalaxyKyabord;
 		};
+		C197F3372F1D65A400B215FB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C197F2FC2F1D658C00B215FB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C197F3312F1D65A400B215FB;
+			remoteInfo = GalaxyKeyboard;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		C197F33E2F1D65A400B215FB /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				C197F3392F1D65A400B215FB /* GalaxyKeyboard.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		C197F3042F1D658C00B215FB /* GalaxyKyabord.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GalaxyKyabord.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C197F3112F1D658D00B215FB /* GalaxyKyabordTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GalaxyKyabordTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		C197F31B2F1D658D00B215FB /* GalaxyKyabordUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GalaxyKyabordUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C197F3322F1D65A400B215FB /* GalaxyKeyboard.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = GalaxyKeyboard.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		C197F33A2F1D65A400B215FB /* Exceptions for "GalaxyKeyboard" folder in "GalaxyKeyboard" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = C197F3312F1D65A400B215FB /* GalaxyKeyboard */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		C197F3062F1D658C00B215FB /* GalaxyKyabord */ = {
@@ -43,6 +79,14 @@
 		C197F31E2F1D658D00B215FB /* GalaxyKyabordUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = GalaxyKyabordUITests;
+			sourceTree = "<group>";
+		};
+		C197F3332F1D65A400B215FB /* GalaxyKeyboard */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				C197F33A2F1D65A400B215FB /* Exceptions for "GalaxyKeyboard" folder in "GalaxyKeyboard" target */,
+			);
+			path = GalaxyKeyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -69,6 +113,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C197F32F2F1D65A400B215FB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -78,6 +129,7 @@
 				C197F3062F1D658C00B215FB /* GalaxyKyabord */,
 				C197F3142F1D658D00B215FB /* GalaxyKyabordTests */,
 				C197F31E2F1D658D00B215FB /* GalaxyKyabordUITests */,
+				C197F3332F1D65A400B215FB /* GalaxyKeyboard */,
 				C197F3052F1D658C00B215FB /* Products */,
 			);
 			sourceTree = "<group>";
@@ -88,6 +140,7 @@
 				C197F3042F1D658C00B215FB /* GalaxyKyabord.app */,
 				C197F3112F1D658D00B215FB /* GalaxyKyabordTests.xctest */,
 				C197F31B2F1D658D00B215FB /* GalaxyKyabordUITests.xctest */,
+				C197F3322F1D65A400B215FB /* GalaxyKeyboard.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -102,10 +155,12 @@
 				C197F3002F1D658C00B215FB /* Sources */,
 				C197F3012F1D658C00B215FB /* Frameworks */,
 				C197F3022F1D658C00B215FB /* Resources */,
+				C197F33E2F1D65A400B215FB /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				C197F3382F1D65A400B215FB /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				C197F3062F1D658C00B215FB /* GalaxyKyabord */,
@@ -163,6 +218,28 @@
 			productReference = C197F31B2F1D658D00B215FB /* GalaxyKyabordUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
+		C197F3312F1D65A400B215FB /* GalaxyKeyboard */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C197F33B2F1D65A400B215FB /* Build configuration list for PBXNativeTarget "GalaxyKeyboard" */;
+			buildPhases = (
+				C197F32E2F1D65A400B215FB /* Sources */,
+				C197F32F2F1D65A400B215FB /* Frameworks */,
+				C197F3302F1D65A400B215FB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				C197F3332F1D65A400B215FB /* GalaxyKeyboard */,
+			);
+			name = GalaxyKeyboard;
+			packageProductDependencies = (
+			);
+			productName = GalaxyKeyboard;
+			productReference = C197F3322F1D65A400B215FB /* GalaxyKeyboard.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -184,6 +261,9 @@
 						CreatedOnToolsVersion = 16.4;
 						TestTargetID = C197F3032F1D658C00B215FB;
 					};
+					C197F3312F1D65A400B215FB = {
+						CreatedOnToolsVersion = 16.4;
+					};
 				};
 			};
 			buildConfigurationList = C197F2FF2F1D658C00B215FB /* Build configuration list for PBXProject "GalaxyKyabord" */;
@@ -203,6 +283,7 @@
 				C197F3032F1D658C00B215FB /* GalaxyKyabord */,
 				C197F3102F1D658D00B215FB /* GalaxyKyabordTests */,
 				C197F31A2F1D658D00B215FB /* GalaxyKyabordUITests */,
+				C197F3312F1D65A400B215FB /* GalaxyKeyboard */,
 			);
 		};
 /* End PBXProject section */
@@ -223,6 +304,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		C197F3192F1D658D00B215FB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C197F3302F1D65A400B215FB /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -253,6 +341,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C197F32E2F1D65A400B215FB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -265,6 +360,11 @@
 			isa = PBXTargetDependency;
 			target = C197F3032F1D658C00B215FB /* GalaxyKyabord */;
 			targetProxy = C197F31C2F1D658D00B215FB /* PBXContainerItemProxy */;
+		};
+		C197F3382F1D65A400B215FB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C197F3312F1D65A400B215FB /* GalaxyKeyboard */;
+			targetProxy = C197F3372F1D65A400B215FB /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -510,6 +610,54 @@
 			};
 			name = Release;
 		};
+		C197F33C2F1D65A400B215FB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = GalaxyKeyboard/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = GalaxyKeyboard;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.noname.GalaxyKyabord.GalaxyKeyboard;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		C197F33D2F1D65A400B215FB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = GalaxyKeyboard/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = GalaxyKeyboard;
+				INFOPLIST_KEY_NSHumanReadableCopyright = "";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.noname.GalaxyKyabord.GalaxyKeyboard;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -545,6 +693,15 @@
 			buildConfigurations = (
 				C197F32C2F1D658D00B215FB /* Debug */,
 				C197F32D2F1D658D00B215FB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C197F33B2F1D65A400B215FB /* Build configuration list for PBXNativeTarget "GalaxyKeyboard" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C197F33C2F1D65A400B215FB /* Debug */,
+				C197F33D2F1D65A400B215FB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
