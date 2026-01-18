@@ -11,6 +11,8 @@ class KeyboardViewController: UIInputViewController {
     
     private var isShifted = false
     private var isCapsLocked = false
+    private var isSymbolsMode = false
+    private var isExtendedSymbolsMode = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -18,6 +20,9 @@ class KeyboardViewController: UIInputViewController {
     }
     
     private func setupKeyboard() {
+        // Remove all subviews first
+        view.subviews.forEach { $0.removeFromSuperview() }
+        
         let stackView = UIStackView()
         stackView.axis = .vertical
         stackView.spacing = 8
@@ -32,20 +37,46 @@ class KeyboardViewController: UIInputViewController {
             stackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -8)
         ])
         
-        // Number row
+        // Number row (always present)
         let numberRow = createNumberRow()
         stackView.addArrangedSubview(numberRow)
         
-        // QWERTY rows
-        let firstRow = createLetterRow(["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"])
-        let secondRow = createLetterRow(["a", "s", "d", "f", "g", "h", "j", "k", "l"])
-        let thirdRow = createThirdRow()
-        let bottomRow = createBottomRow()
-        
-        stackView.addArrangedSubview(firstRow)
-        stackView.addArrangedSubview(secondRow)
-        stackView.addArrangedSubview(thirdRow)
-        stackView.addArrangedSubview(bottomRow)
+        if isSymbolsMode {
+            if isExtendedSymbolsMode {
+                // Extended symbol rows (2/2 mode)
+                let firstRow = createSymbolRow(["`", "~", "\\", "|", "{", "}", "€", "£", "¥", "₩"])
+                let secondRow = createSymbolRow(["°", "•", "○", "●", "□", "■", "♠", "♥", "♦", "♣"])
+                let thirdRow = createExtendedSymbolThirdRow()
+                let bottomRow = createBottomRow()
+                
+                stackView.addArrangedSubview(firstRow)
+                stackView.addArrangedSubview(secondRow)
+                stackView.addArrangedSubview(thirdRow)
+                stackView.addArrangedSubview(bottomRow)
+            } else {
+                // Regular symbol rows (1/2 mode)
+                let firstRow = createSymbolRow(["+", "×", "÷", "=", "/", "_", "<", ">", "[", "]"])
+                let secondRow = createSymbolRow(["!", "@", "#", "$", "%", "^", "&", "*", "(", ")"])
+                let thirdRow = createSymbolThirdRow()
+                let bottomRow = createBottomRow()
+                
+                stackView.addArrangedSubview(firstRow)
+                stackView.addArrangedSubview(secondRow)
+                stackView.addArrangedSubview(thirdRow)
+                stackView.addArrangedSubview(bottomRow)
+            }
+        } else {
+            // QWERTY rows
+            let firstRow = createLetterRow(["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"])
+            let secondRow = createLetterRow(["a", "s", "d", "f", "g", "h", "j", "k", "l"])
+            let thirdRow = createThirdRow()
+            let bottomRow = createBottomRow()
+            
+            stackView.addArrangedSubview(firstRow)
+            stackView.addArrangedSubview(secondRow)
+            stackView.addArrangedSubview(thirdRow)
+            stackView.addArrangedSubview(bottomRow)
+        }
     }
     
     private func createNumberRow() -> UIStackView {
@@ -73,6 +104,66 @@ class KeyboardViewController: UIInputViewController {
         for letter in letters {
             let button = createKeyButton(title: letter, action: #selector(letterKeyPressed(_:)))
             stackView.addArrangedSubview(button)
+        }
+        
+        return stackView
+    }
+    
+    private func createSymbolRow(_ symbols: [String]) -> UIStackView {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.distribution = .fillEqually
+        stackView.spacing = 4
+        
+        for symbol in symbols {
+            let button = createKeyButton(title: symbol, action: #selector(symbolRowKeyPressed(_:)))
+            stackView.addArrangedSubview(button)
+        }
+        
+        return stackView
+    }
+    
+    private func createSymbolThirdRow() -> UIStackView {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.distribution = .fillEqually
+        stackView.spacing = 4
+        
+        let symbols = ["1/2", "-", "'", "\"", ":", ";", ",", "?", "⌫"]
+        for symbol in symbols {
+            if symbol == "⌫" {
+                let deleteButton = createSpecialButton(title: symbol, action: #selector(deletePressed))
+                stackView.addArrangedSubview(deleteButton)
+            } else if symbol == "1/2" {
+                let toggleButton = createKeyButton(title: symbol, action: #selector(toggleExtendedSymbols))
+                stackView.addArrangedSubview(toggleButton)
+            } else {
+                let button = createKeyButton(title: symbol, action: #selector(symbolRowKeyPressed(_:)))
+                stackView.addArrangedSubview(button)
+            }
+        }
+        
+        return stackView
+    }
+    
+    private func createExtendedSymbolThirdRow() -> UIStackView {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.distribution = .fillEqually
+        stackView.spacing = 4
+        
+        let symbols = ["2/2", "☆", "■", "¤","《","》", "¡", "¿", "⌫"]
+        for symbol in symbols {
+            if symbol == "⌫" {
+                let deleteButton = createSpecialButton(title: symbol, action: #selector(deletePressed))
+                stackView.addArrangedSubview(deleteButton)
+            } else if symbol == "2/2" {
+                let toggleButton = createKeyButton(title: symbol, action: #selector(toggleExtendedSymbols))
+                stackView.addArrangedSubview(toggleButton)
+            } else {
+                let button = createKeyButton(title: symbol, action: #selector(symbolRowKeyPressed(_:)))
+                stackView.addArrangedSubview(button)
+            }
         }
         
         return stackView
@@ -112,7 +203,8 @@ class KeyboardViewController: UIInputViewController {
         stackView.axis = .horizontal
         stackView.spacing = 4
         
-        let symbolButton = createKeyButton(title: "!#1", action: #selector(symbolKeyPressed(_:)))
+        let symbolButtonTitle = isSymbolsMode ? "ABC" : "!#1"
+        let symbolButton = createKeyButton(title: symbolButtonTitle, action: #selector(toggleSymbolsMode))
         symbolButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
         
         let commaButton = createKeyButton(title: ",", action: #selector(punctuationKeyPressed(_:)))
@@ -212,8 +304,20 @@ class KeyboardViewController: UIInputViewController {
         textDocumentProxy.insertText("\n")
     }
     
-    @objc private func symbolKeyPressed(_ sender: UIButton) {
-        // For now, just insert the text as is. This could be expanded to switch to a symbols keyboard
+    @objc private func toggleSymbolsMode() {
+        isSymbolsMode.toggle()
+        isExtendedSymbolsMode = false // Reset extended symbols when switching modes
+        setupKeyboard()
+        updateAppearance()
+    }
+    
+    @objc private func toggleExtendedSymbols() {
+        isExtendedSymbolsMode.toggle()
+        setupKeyboard()
+        updateAppearance()
+    }
+    
+    @objc private func symbolRowKeyPressed(_ sender: UIButton) {
         guard let title = sender.currentTitle else { return }
         textDocumentProxy.insertText(title)
     }
