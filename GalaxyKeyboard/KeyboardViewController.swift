@@ -13,6 +13,7 @@ class KeyboardViewController: UIInputViewController {
     private var isCapsLocked = false
     private var isSymbolsMode = false
     private var isExtendedSymbolsMode = false
+    private var letterButtons: [UIButton] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,6 +23,7 @@ class KeyboardViewController: UIInputViewController {
     private func setupKeyboard() {
         // Remove all subviews first
         view.subviews.forEach { $0.removeFromSuperview() }
+        letterButtons.removeAll()
         
         let stackView = UIStackView()
         stackView.axis = .vertical
@@ -103,6 +105,7 @@ class KeyboardViewController: UIInputViewController {
         
         for letter in letters {
             let button = createKeyButton(title: letter, action: #selector(letterKeyPressed(_:)))
+            letterButtons.append(button)
             stackView.addArrangedSubview(button)
         }
         
@@ -185,6 +188,7 @@ class KeyboardViewController: UIInputViewController {
         let letters = ["z", "x", "c", "v", "b", "n", "m"]
         for letter in letters {
             let button = createKeyButton(title: letter, action: #selector(letterKeyPressed(_:)))
+            letterButtons.append(button)
             letterStackView.addArrangedSubview(button)
         }
         
@@ -236,8 +240,12 @@ class KeyboardViewController: UIInputViewController {
         let button = UIButton(type: .system)
         button.setTitle(title, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18)
-        button.backgroundColor = UIColor.systemGray4
+        button.backgroundColor = UIColor.white
         button.layer.cornerRadius = 8
+        button.layer.shadowColor = UIColor.black.cgColor
+        button.layer.shadowOffset = CGSize(width: 0, height: 1)
+        button.layer.shadowOpacity = 0.1
+        button.layer.shadowRadius = 1
         button.addTarget(self, action: action, for: .touchUpInside)
         button.heightAnchor.constraint(equalToConstant: 45).isActive = true
         return button
@@ -328,26 +336,17 @@ class KeyboardViewController: UIInputViewController {
     }
     
     private func updateShiftState() {
-        for subview in view.subviews {
-            updateShiftStateRecursively(in: subview)
-        }
-    }
-    
-    private func updateShiftStateRecursively(in view: UIView) {
-        if let button = view as? UIButton,
-           let title = button.currentTitle,
-           title.count == 1,
-           title.first?.isLetter == true {
+        // Only update if we're in letter mode and have letter buttons
+        guard !isSymbolsMode && !letterButtons.isEmpty else { return }
+        
+        for button in letterButtons {
+            guard let title = button.currentTitle else { continue }
             
             if isShifted || isCapsLocked {
                 button.setTitle(title.uppercased(), for: .normal)
             } else {
                 button.setTitle(title.lowercased(), for: .normal)
             }
-        }
-        
-        for subview in view.subviews {
-            updateShiftStateRecursively(in: subview)
         }
     }
     
@@ -362,9 +361,9 @@ class KeyboardViewController: UIInputViewController {
     
     private func updateAppearance() {
         let isDarkMode = textDocumentProxy.keyboardAppearance == .dark
-        let backgroundColor = isDarkMode ? UIColor.black : UIColor.systemGray6
-        let keyColor = isDarkMode ? UIColor.systemGray3 : UIColor.systemGray4
-        let specialKeyColor = isDarkMode ? UIColor.systemGray2 : UIColor.systemGray3
+        let backgroundColor = isDarkMode ? UIColor.black : UIColor.systemGray5
+        let keyColor = isDarkMode ? UIColor.systemGray3 : UIColor.white
+        let specialKeyColor = isDarkMode ? UIColor.systemGray2 : UIColor.systemGray4
         let textColor = isDarkMode ? UIColor.white : UIColor.black
         
         view.backgroundColor = backgroundColor
