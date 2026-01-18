@@ -1,0 +1,555 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXContainerItemProxy section */
+		C197F3122F1D658D00B215FB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C197F2FC2F1D658C00B215FB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C197F3032F1D658C00B215FB;
+			remoteInfo = GalaxyKyabord;
+		};
+		C197F31C2F1D658D00B215FB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = C197F2FC2F1D658C00B215FB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C197F3032F1D658C00B215FB;
+			remoteInfo = GalaxyKyabord;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		C197F3042F1D658C00B215FB /* GalaxyKyabord.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GalaxyKyabord.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C197F3112F1D658D00B215FB /* GalaxyKyabordTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GalaxyKyabordTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C197F31B2F1D658D00B215FB /* GalaxyKyabordUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GalaxyKyabordUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		C197F3062F1D658C00B215FB /* GalaxyKyabord */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = GalaxyKyabord;
+			sourceTree = "<group>";
+		};
+		C197F3142F1D658D00B215FB /* GalaxyKyabordTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = GalaxyKyabordTests;
+			sourceTree = "<group>";
+		};
+		C197F31E2F1D658D00B215FB /* GalaxyKyabordUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = GalaxyKyabordUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		C197F3012F1D658C00B215FB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C197F30E2F1D658D00B215FB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C197F3182F1D658D00B215FB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		C197F2FB2F1D658C00B215FB = {
+			isa = PBXGroup;
+			children = (
+				C197F3062F1D658C00B215FB /* GalaxyKyabord */,
+				C197F3142F1D658D00B215FB /* GalaxyKyabordTests */,
+				C197F31E2F1D658D00B215FB /* GalaxyKyabordUITests */,
+				C197F3052F1D658C00B215FB /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		C197F3052F1D658C00B215FB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				C197F3042F1D658C00B215FB /* GalaxyKyabord.app */,
+				C197F3112F1D658D00B215FB /* GalaxyKyabordTests.xctest */,
+				C197F31B2F1D658D00B215FB /* GalaxyKyabordUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		C197F3032F1D658C00B215FB /* GalaxyKyabord */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C197F3252F1D658D00B215FB /* Build configuration list for PBXNativeTarget "GalaxyKyabord" */;
+			buildPhases = (
+				C197F3002F1D658C00B215FB /* Sources */,
+				C197F3012F1D658C00B215FB /* Frameworks */,
+				C197F3022F1D658C00B215FB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				C197F3062F1D658C00B215FB /* GalaxyKyabord */,
+			);
+			name = GalaxyKyabord;
+			packageProductDependencies = (
+			);
+			productName = GalaxyKyabord;
+			productReference = C197F3042F1D658C00B215FB /* GalaxyKyabord.app */;
+			productType = "com.apple.product-type.application";
+		};
+		C197F3102F1D658D00B215FB /* GalaxyKyabordTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C197F3282F1D658D00B215FB /* Build configuration list for PBXNativeTarget "GalaxyKyabordTests" */;
+			buildPhases = (
+				C197F30D2F1D658D00B215FB /* Sources */,
+				C197F30E2F1D658D00B215FB /* Frameworks */,
+				C197F30F2F1D658D00B215FB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C197F3132F1D658D00B215FB /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				C197F3142F1D658D00B215FB /* GalaxyKyabordTests */,
+			);
+			name = GalaxyKyabordTests;
+			packageProductDependencies = (
+			);
+			productName = GalaxyKyabordTests;
+			productReference = C197F3112F1D658D00B215FB /* GalaxyKyabordTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		C197F31A2F1D658D00B215FB /* GalaxyKyabordUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C197F32B2F1D658D00B215FB /* Build configuration list for PBXNativeTarget "GalaxyKyabordUITests" */;
+			buildPhases = (
+				C197F3172F1D658D00B215FB /* Sources */,
+				C197F3182F1D658D00B215FB /* Frameworks */,
+				C197F3192F1D658D00B215FB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C197F31D2F1D658D00B215FB /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				C197F31E2F1D658D00B215FB /* GalaxyKyabordUITests */,
+			);
+			name = GalaxyKyabordUITests;
+			packageProductDependencies = (
+			);
+			productName = GalaxyKyabordUITests;
+			productReference = C197F31B2F1D658D00B215FB /* GalaxyKyabordUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		C197F2FC2F1D658C00B215FB /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1640;
+				LastUpgradeCheck = 1640;
+				TargetAttributes = {
+					C197F3032F1D658C00B215FB = {
+						CreatedOnToolsVersion = 16.4;
+					};
+					C197F3102F1D658D00B215FB = {
+						CreatedOnToolsVersion = 16.4;
+						TestTargetID = C197F3032F1D658C00B215FB;
+					};
+					C197F31A2F1D658D00B215FB = {
+						CreatedOnToolsVersion = 16.4;
+						TestTargetID = C197F3032F1D658C00B215FB;
+					};
+				};
+			};
+			buildConfigurationList = C197F2FF2F1D658C00B215FB /* Build configuration list for PBXProject "GalaxyKyabord" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = C197F2FB2F1D658C00B215FB;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = C197F3052F1D658C00B215FB /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C197F3032F1D658C00B215FB /* GalaxyKyabord */,
+				C197F3102F1D658D00B215FB /* GalaxyKyabordTests */,
+				C197F31A2F1D658D00B215FB /* GalaxyKyabordUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		C197F3022F1D658C00B215FB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C197F30F2F1D658D00B215FB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C197F3192F1D658D00B215FB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		C197F3002F1D658C00B215FB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C197F30D2F1D658D00B215FB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C197F3172F1D658D00B215FB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		C197F3132F1D658D00B215FB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C197F3032F1D658C00B215FB /* GalaxyKyabord */;
+			targetProxy = C197F3122F1D658D00B215FB /* PBXContainerItemProxy */;
+		};
+		C197F31D2F1D658D00B215FB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C197F3032F1D658C00B215FB /* GalaxyKyabord */;
+			targetProxy = C197F31C2F1D658D00B215FB /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		C197F3232F1D658D00B215FB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		C197F3242F1D658D00B215FB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		C197F3262F1D658D00B215FB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.noname.GalaxyKyabord;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		C197F3272F1D658D00B215FB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.noname.GalaxyKyabord;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		C197F3292F1D658D00B215FB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.noname.GalaxyKyabordTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GalaxyKyabord.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/GalaxyKyabord";
+			};
+			name = Debug;
+		};
+		C197F32A2F1D658D00B215FB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.5;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.noname.GalaxyKyabordTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GalaxyKyabord.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/GalaxyKyabord";
+			};
+			name = Release;
+		};
+		C197F32C2F1D658D00B215FB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.noname.GalaxyKyabordUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = GalaxyKyabord;
+			};
+			name = Debug;
+		};
+		C197F32D2F1D658D00B215FB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.noname.GalaxyKyabordUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = GalaxyKyabord;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		C197F2FF2F1D658C00B215FB /* Build configuration list for PBXProject "GalaxyKyabord" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C197F3232F1D658D00B215FB /* Debug */,
+				C197F3242F1D658D00B215FB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C197F3252F1D658D00B215FB /* Build configuration list for PBXNativeTarget "GalaxyKyabord" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C197F3262F1D658D00B215FB /* Debug */,
+				C197F3272F1D658D00B215FB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C197F3282F1D658D00B215FB /* Build configuration list for PBXNativeTarget "GalaxyKyabordTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C197F3292F1D658D00B215FB /* Debug */,
+				C197F32A2F1D658D00B215FB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C197F32B2F1D658D00B215FB /* Build configuration list for PBXNativeTarget "GalaxyKyabordUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C197F32C2F1D658D00B215FB /* Debug */,
+				C197F32D2F1D658D00B215FB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = C197F2FC2F1D658C00B215FB /* Project object */;
+}
