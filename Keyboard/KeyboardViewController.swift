@@ -15,6 +15,45 @@ class KeyboardViewController: UIInputViewController {
     private var isExtendedSymbolsMode = false
     private var letterButtons: [UIButton] = []
     
+    // Language support
+    private var currentLanguage: KeyboardLanguage = .english
+    private var spaceButton: UIButton?
+    
+    enum KeyboardLanguage {
+        case english
+        case russian
+        
+        var displayName: String {
+            switch self {
+            case .english: return "EN"
+            case .russian: return "РУ"
+            }
+        }
+    }
+    
+    struct KeyboardLayout {
+        let firstRow: [String]
+        let secondRow: [String]
+        let thirdRow: [String]
+    }
+    
+    private func getKeyboardLayout(for language: KeyboardLanguage) -> KeyboardLayout {
+        switch language {
+        case .english:
+            return KeyboardLayout(
+                firstRow: ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"],
+                secondRow: ["a", "s", "d", "f", "g", "h", "j", "k", "l"],
+                thirdRow: ["z", "x", "c", "v", "b", "n", "m"]
+            )
+        case .russian:
+            return KeyboardLayout(
+                firstRow: ["й", "ц", "у", "к", "е", "н", "г", "ш", "щ", "з"],
+                secondRow: ["ф", "ы", "в", "а", "п", "р", "о", "л", "д"],
+                thirdRow: ["я", "ч", "с", "м", "и", "т", "ь"]
+            )
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupKeyboard()
@@ -68,10 +107,11 @@ class KeyboardViewController: UIInputViewController {
                 stackView.addArrangedSubview(bottomRow)
             }
         } else {
-            // QWERTY rows
-            let firstRow = createLetterRow(["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"])
-            let secondRow = createLetterRow(["a", "s", "d", "f", "g", "h", "j", "k", "l"])
-            let thirdRow = createThirdRow()
+            // Letter rows based on current language
+            let layout = getKeyboardLayout(for: currentLanguage)
+            let firstRow = createLetterRow(layout.firstRow)
+            let secondRow = createLetterRow(layout.secondRow)
+            let thirdRow = createThirdRow(layout.thirdRow)
             let bottomRow = createBottomRow()
             
             stackView.addArrangedSubview(firstRow)
@@ -172,7 +212,7 @@ class KeyboardViewController: UIInputViewController {
         return stackView
     }
     
-    private func createThirdRow() -> UIStackView {
+    private func createThirdRow(_ letters: [String]) -> UIStackView {
         let stackView = UIStackView()
         stackView.axis = .horizontal
         stackView.spacing = 4
@@ -185,7 +225,6 @@ class KeyboardViewController: UIInputViewController {
         letterStackView.distribution = .fillEqually
         letterStackView.spacing = 4
         
-        let letters = ["z", "x", "c", "v", "b", "n", "m"]
         for letter in letters {
             let button = createKeyButton(title: letter, action: #selector(letterKeyPressed(_:)))
             letterButtons.append(button)
@@ -214,7 +253,9 @@ class KeyboardViewController: UIInputViewController {
         let commaButton = createKeyButton(title: ",", action: #selector(punctuationKeyPressed(_:)))
         commaButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
         
-        let spaceButton = createSpecialButton(title: "space", action: #selector(spacePressed))
+        let spaceButton = createSpecialButton(title: "\(currentLanguage.displayName)", action: #selector(spacePressed))
+        self.spaceButton = spaceButton
+        setupSpaceButtonGestures(spaceButton)
         
         let dotButton = createKeyButton(title: ".", action: #selector(punctuationKeyPressed(_:)))
         dotButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
@@ -308,6 +349,42 @@ class KeyboardViewController: UIInputViewController {
         textDocumentProxy.insertText(" ")
     }
     
+    private func setupSpaceButtonGestures(_ button: UIButton) {
+        let leftSwipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(spaceSwipedLeft))
+        leftSwipeGesture.direction = .left
+        button.addGestureRecognizer(leftSwipeGesture)
+        
+        let rightSwipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(spaceSwipedRight))
+        rightSwipeGesture.direction = .right
+        button.addGestureRecognizer(rightSwipeGesture)
+    }
+    
+    @objc private func spaceSwipedLeft() {
+        switchLanguage()
+    }
+    
+    @objc private func spaceSwipedRight() {
+        switchLanguage()
+    }
+    
+    private func switchLanguage() {
+        currentLanguage = (currentLanguage == .english) ? .russian : .english
+        
+        // Reset shift and caps lock when switching languages
+        isShifted = false
+        isCapsLocked = false
+        
+        // Update space button title to show current language
+        updateSpaceButtonTitle()
+        
+        // Rebuild keyboard with new language
+        setupKeyboard()
+    }
+    
+    private func updateSpaceButtonTitle() {
+        spaceButton?.setTitle("\(currentLanguage.displayName) space", for: .normal)
+    }
+    
     @objc private func returnPressed() {
         textDocumentProxy.insertText("\n")
     }
@@ -374,7 +451,7 @@ class KeyboardViewController: UIInputViewController {
     private func updateColorsRecursively(in view: UIView, keyColor: UIColor, specialKeyColor: UIColor, textColor: UIColor) {
         if let button = view as? UIButton {
             if let title = button.currentTitle {
-                if title == "⇧" || title == "⌫" || title == "🌐" || title == "space" || title == "return" || title == "ABC" || title == "1/2" || title == "2/2" || title == "!#1" {
+                if title == "⇧" || title == "⌫" || title == "🌐" || title.contains("space") || title == "return" || title == "ABC" || title == "1/2" || title == "2/2" || title == "!#1" {
                     button.backgroundColor = specialKeyColor
                 } else {
                     button.backgroundColor = keyColor
