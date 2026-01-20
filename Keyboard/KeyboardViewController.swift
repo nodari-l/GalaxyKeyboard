@@ -47,9 +47,9 @@ class KeyboardViewController: UIInputViewController {
             )
         case .russian:
             return KeyboardLayout(
-                firstRow: ["й", "ц", "у", "к", "е", "н", "г", "ш", "щ", "з"],
-                secondRow: ["ф", "ы", "в", "а", "п", "р", "о", "л", "д"],
-                thirdRow: ["я", "ч", "с", "м", "и", "т", "ь"]
+                firstRow: ["й", "ц", "у", "к", "е", "н", "г", "ш", "щ", "з", "х", "ъ"],
+                secondRow: ["ф", "ы", "в", "а", "п", "р", "о", "л", "д", "ж", "э"],
+                thirdRow: ["я", "ч", "с", "м", "и", "т", "ь", "б", "ю"]
             )
         }
     }
@@ -143,8 +143,11 @@ class KeyboardViewController: UIInputViewController {
         stackView.distribution = .fillEqually
         stackView.spacing = 4
         
+        let shouldUppercase = isShifted || isCapsLocked
+        
         for letter in letters {
-            let button = createKeyButton(title: letter, action: #selector(letterKeyPressed(_:)))
+            let displayLetter = shouldUppercase ? letter.uppercased() : letter.lowercased()
+            let button = createKeyButton(title: displayLetter, action: #selector(letterKeyPressed(_:)))
             letterButtons.append(button)
             stackView.addArrangedSubview(button)
         }
@@ -215,27 +218,23 @@ class KeyboardViewController: UIInputViewController {
     private func createThirdRow(_ letters: [String]) -> UIStackView {
         let stackView = UIStackView()
         stackView.axis = .horizontal
+        stackView.distribution = .fillEqually
         stackView.spacing = 4
         
         let shiftButton = createSpecialButton(title: "⇧", action: #selector(shiftPressed))
-        shiftButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
         
-        let letterStackView = UIStackView()
-        letterStackView.axis = .horizontal
-        letterStackView.distribution = .fillEqually
-        letterStackView.spacing = 4
+        let shouldUppercase = isShifted || isCapsLocked
         
         for letter in letters {
-            let button = createKeyButton(title: letter, action: #selector(letterKeyPressed(_:)))
+            let displayLetter = shouldUppercase ? letter.uppercased() : letter.lowercased()
+            let button = createKeyButton(title: displayLetter, action: #selector(letterKeyPressed(_:)))
             letterButtons.append(button)
-            letterStackView.addArrangedSubview(button)
+            stackView.addArrangedSubview(button)
         }
         
         let deleteButton = createSpecialButton(title: "⌫", action: #selector(deletePressed))
-        deleteButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
         
-        stackView.addArrangedSubview(shiftButton)
-        stackView.addArrangedSubview(letterStackView)
+        stackView.insertArrangedSubview(shiftButton, at: 0)
         stackView.addArrangedSubview(deleteButton)
         
         return stackView
@@ -260,8 +259,7 @@ class KeyboardViewController: UIInputViewController {
         let dotButton = createKeyButton(title: ".", action: #selector(punctuationKeyPressed(_:)))
         dotButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
         
-        let returnButton = createSpecialButton(title: "return", action: #selector(returnPressed))
-        returnButton.widthAnchor.constraint(equalToConstant: 80).isActive = true
+        let returnButton = createSpecialButton(title: "↵", action: #selector(returnPressed))
         
         let nextKeyboardButton = createSpecialButton(title: "🌐", action: #selector(handleInputModeList(from:with:)))
         nextKeyboardButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
@@ -413,18 +411,8 @@ class KeyboardViewController: UIInputViewController {
     }
     
     private func updateShiftState() {
-        // Only update if we're in letter mode and have letter buttons
-        guard !isSymbolsMode && !letterButtons.isEmpty else { return }
-        
-        for button in letterButtons {
-            guard let title = button.currentTitle else { continue }
-            
-            if isShifted || isCapsLocked {
-                button.setTitle(title.uppercased(), for: .normal)
-            } else {
-                button.setTitle(title.lowercased(), for: .normal)
-            }
-        }
+        guard !isSymbolsMode else { return }
+        setupKeyboard()
     }
     
     override func textDidChange(_ textInput: UITextInput?) {
@@ -451,7 +439,7 @@ class KeyboardViewController: UIInputViewController {
     private func updateColorsRecursively(in view: UIView, keyColor: UIColor, specialKeyColor: UIColor, textColor: UIColor) {
         if let button = view as? UIButton {
             if let title = button.currentTitle {
-                if title == "⇧" || title == "⌫" || title == "🌐" || title.contains("space") || title == "return" || title == "ABC" || title == "1/2" || title == "2/2" || title == "!#1" {
+                if title == "⇧" || title == "⌫" || title == "🌐" || title.contains("space") || title == "return" || title == "↵" || title == "ABC" || title == "1/2" || title == "2/2" || title == "!#1" {
                     button.backgroundColor = specialKeyColor
                 } else {
                     button.backgroundColor = keyColor
