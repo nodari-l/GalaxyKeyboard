@@ -25,6 +25,9 @@ class KeyboardViewController: UIInputViewController {
     private var popupView: UIView?
     private var longPressTimer: Timer?
     
+    // Key preview popup
+    private var keyPreviewView: UIView?
+    
     enum KeyboardLanguage {
         case english
         case russian
@@ -313,6 +316,10 @@ class KeyboardViewController: UIInputViewController {
         button.layer.shadowOpacity = 0.3
         button.layer.shadowRadius = 0
         button.addTarget(self, action: action, for: .touchUpInside)
+        button.addTarget(self, action: #selector(keyTouchDown(_:)), for: .touchDown)
+        button.addTarget(self, action: #selector(keyTouchUp(_:)), for: .touchUpInside)
+        button.addTarget(self, action: #selector(keyTouchUp(_:)), for: .touchUpOutside)
+        button.addTarget(self, action: #selector(keyTouchUp(_:)), for: .touchCancel)
         button.heightAnchor.constraint(equalToConstant: 45).isActive = true
         return button
     }
@@ -328,10 +335,93 @@ class KeyboardViewController: UIInputViewController {
         button.layer.shadowOpacity = 0.3
         button.layer.shadowRadius = 0
         button.addTarget(self, action: action, for: .touchUpInside)
+        button.addTarget(self, action: #selector(keyTouchDown(_:)), for: .touchDown)
+        button.addTarget(self, action: #selector(keyTouchUp(_:)), for: .touchUpInside)
+        button.addTarget(self, action: #selector(keyTouchUp(_:)), for: .touchUpOutside)
+        button.addTarget(self, action: #selector(keyTouchUp(_:)), for: .touchCancel)
         button.heightAnchor.constraint(equalToConstant: 45).isActive = true
         return button
     }
     
+    @objc private func keyTouchDown(_ sender: UIButton) {
+        showKeyPreview(for: sender)
+    }
+    
+    @objc private func keyTouchUp(_ sender: UIButton) {
+        hideKeyPreview()
+    }
+    
+    private func showKeyPreview(for button: UIButton) {
+        // Remove any existing preview
+        hideKeyPreview()
+        
+        guard let buttonTitle = button.currentTitle else { return }
+        
+        // Don't show preview for certain special keys
+        if buttonTitle == "🌐" || buttonTitle == "⇧" || buttonTitle == "⌫" || buttonTitle == "↵" || buttonTitle.contains("space") {
+            return
+        }
+        
+        // Create preview container
+        let previewSize: CGFloat = 60
+        let preview = UIView()
+        preview.backgroundColor = UIColor.white
+        preview.layer.cornerRadius = 8
+        preview.layer.shadowColor = UIColor.black.cgColor
+        preview.layer.shadowOffset = CGSize(width: 0, height: 3)
+        preview.layer.shadowOpacity = 0.3
+        preview.layer.shadowRadius = 4
+        
+        // Create label for the key text
+        let label = UILabel()
+        label.text = buttonTitle
+        label.font = UIFont.systemFont(ofSize: 24, weight: .medium)
+        label.textAlignment = .center
+        label.textColor = UIColor.black
+        
+        // Position the preview above the button
+        let buttonFrame = button.convert(button.bounds, to: view)
+        let previewX = buttonFrame.midX - previewSize / 2
+        let previewY = buttonFrame.minY - previewSize - 10
+        
+        preview.frame = CGRect(x: previewX, y: previewY, width: previewSize, height: previewSize)
+        label.frame = preview.bounds
+        
+        preview.addSubview(label)
+        view.addSubview(preview)
+        
+        // Apply theme colors
+        let isDarkMode = textDocumentProxy.keyboardAppearance == .dark
+        if isDarkMode {
+            preview.backgroundColor = UIColor.systemGray3
+            label.textColor = UIColor.white
+        }
+        
+        // Animate appearance
+        preview.alpha = 0
+        preview.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+        
+        UIView.animate(withDuration: 0.1) {
+            preview.alpha = 1
+            preview.transform = CGAffineTransform.identity
+        }
+        
+        keyPreviewView = preview
+    }
+    
+    private func hideKeyPreview() {
+        guard let preview = keyPreviewView else { return }
+        
+        UIView.animate(withDuration: 0.1, animations: {
+            preview.alpha = 0
+            preview.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+        }) { _ in
+            preview.removeFromSuperview()
+        }
+        
+        keyPreviewView = nil
+    }
+
     @objc private func numberKeyPressed(_ sender: UIButton) {
         guard let title = sender.currentTitle else { return }
         textDocumentProxy.insertText(title)
