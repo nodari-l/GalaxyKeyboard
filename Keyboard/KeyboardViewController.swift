@@ -28,6 +28,9 @@ class KeyboardViewController: UIInputViewController {
     // Key preview popup
     private var keyPreviewView: UIView?
     
+    // Backspace repeat
+    private var deleteTimer: Timer?
+    
     enum KeyboardLanguage {
         case english
         case russian
@@ -66,6 +69,11 @@ class KeyboardViewController: UIInputViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupKeyboard()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        stopDeleteRepeat()
     }
     
     private func setupKeyboard() {
@@ -196,7 +204,7 @@ class KeyboardViewController: UIInputViewController {
         let symbols = ["1/2", "-", "'", "\"", ":", ";", ",", "?", "⌫"]
         for symbol in symbols {
             if symbol == "⌫" {
-                let deleteButton = createSpecialButton(title: symbol, action: #selector(deletePressed))
+                let deleteButton = createDeleteButton(title: symbol)
                 stackView.addArrangedSubview(deleteButton)
             } else if symbol == "1/2" {
                 let toggleButton = createKeyButton(title: symbol, action: #selector(toggleExtendedSymbols))
@@ -219,7 +227,7 @@ class KeyboardViewController: UIInputViewController {
         let symbols = ["2/2", "☆", "■", "¤","《","》", "¡", "¿", "⌫"]
         for symbol in symbols {
             if symbol == "⌫" {
-                let deleteButton = createSpecialButton(title: symbol, action: #selector(deletePressed))
+                let deleteButton = createDeleteButton(title: symbol)
                 stackView.addArrangedSubview(deleteButton)
             } else if symbol == "2/2" {
                 let toggleButton = createKeyButton(title: symbol, action: #selector(toggleExtendedSymbols))
@@ -261,7 +269,7 @@ class KeyboardViewController: UIInputViewController {
             stackView.addArrangedSubview(button)
         }
         
-        let deleteButton = createSpecialButton(title: "⌫", action: #selector(deletePressed))
+        let deleteButton = createDeleteButton(title: "⌫")
         
         stackView.insertArrangedSubview(shiftButton, at: 0)
         stackView.addArrangedSubview(deleteButton)
@@ -335,6 +343,28 @@ class KeyboardViewController: UIInputViewController {
         button.layer.shadowOpacity = 0.3
         button.layer.shadowRadius = 0
         button.addTarget(self, action: action, for: .touchUpInside)
+        button.addTarget(self, action: #selector(keyTouchDown(_:)), for: .touchDown)
+        button.addTarget(self, action: #selector(keyTouchUp(_:)), for: .touchUpInside)
+        button.addTarget(self, action: #selector(keyTouchUp(_:)), for: .touchUpOutside)
+        button.addTarget(self, action: #selector(keyTouchUp(_:)), for: .touchCancel)
+        button.heightAnchor.constraint(equalToConstant: 45).isActive = true
+        return button
+    }
+    
+    private func createDeleteButton(title: String) -> UIButton {
+        let button = UIButton(type: .system)
+        button.setTitle(title, for: .normal)
+        button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+        button.backgroundColor = UIColor.systemGray3
+        button.layer.cornerRadius = 5
+        button.layer.shadowColor = UIColor.black.cgColor
+        button.layer.shadowOffset = CGSize(width: 0, height: 1)
+        button.layer.shadowOpacity = 0.3
+        button.layer.shadowRadius = 0
+        button.addTarget(self, action: #selector(deleteTouchDown(_:)), for: .touchDown)
+        button.addTarget(self, action: #selector(deleteTouchUp(_:)), for: .touchUpInside)
+        button.addTarget(self, action: #selector(deleteTouchUp(_:)), for: .touchUpOutside)
+        button.addTarget(self, action: #selector(deleteTouchUp(_:)), for: .touchCancel)
         button.addTarget(self, action: #selector(keyTouchDown(_:)), for: .touchDown)
         button.addTarget(self, action: #selector(keyTouchUp(_:)), for: .touchUpInside)
         button.addTarget(self, action: #selector(keyTouchUp(_:)), for: .touchUpOutside)
@@ -478,6 +508,32 @@ class KeyboardViewController: UIInputViewController {
     
     @objc private func deletePressed() {
         textDocumentProxy.deleteBackward()
+    }
+    
+    @objc private func deleteTouchDown(_ sender: UIButton) {
+        // Immediately delete one character
+        textDocumentProxy.deleteBackward()
+        
+        // Start repeating after a delay
+        deleteTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { _ in
+            self.startDeleteRepeat()
+        }
+    }
+    
+    @objc private func deleteTouchUp(_ sender: UIButton) {
+        stopDeleteRepeat()
+    }
+    
+    private func startDeleteRepeat() {
+        deleteTimer?.invalidate()
+        deleteTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
+            self.textDocumentProxy.deleteBackward()
+        }
+    }
+    
+    private func stopDeleteRepeat() {
+        deleteTimer?.invalidate()
+        deleteTimer = nil
     }
     
     @objc private func spacePressed() {
