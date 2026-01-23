@@ -388,7 +388,7 @@ class KeyboardViewController: UIInputViewController {
         guard let buttonTitle = button.currentTitle else { return }
         
         // Don't show preview for certain special keys
-        if buttonTitle == "🌐" || buttonTitle == "⇧" || buttonTitle == "⌫" || buttonTitle == "↵" || buttonTitle.contains("space") {
+        if buttonTitle == "🌐" || buttonTitle == "⇧" || buttonTitle == "⌫" || buttonTitle == "↵" || buttonTitle.contains("space") || buttonTitle == "EN" || buttonTitle == "РУ" || buttonTitle == "!#1" || buttonTitle == "1/2" {
             return
         }
         
