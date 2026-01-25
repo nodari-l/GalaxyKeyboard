@@ -185,8 +185,8 @@ class KeyboardViewController: UIInputViewController {
         stackView.spacing = 6
         
         for letter in letters {
-            // Always display uppercase letters on buttons
-            let displayLetter = letter.uppercased()
+            // Display letters based on shift/caps state
+            let displayLetter = (isShifted || isCapsLocked) ? letter.uppercased() : letter.lowercased()
             let button = createKeyButton(title: displayLetter, action: #selector(letterKeyPressed(_:)))
             // Store the original lowercase letter for input logic
             button.accessibilityIdentifier = letter.lowercased()
@@ -276,8 +276,8 @@ class KeyboardViewController: UIInputViewController {
         updateShiftButtonAppearance()
         
         for letter in letters {
-            // Always display uppercase letters on buttons
-            let displayLetter = letter.uppercased()
+            // Display letters based on shift/caps state
+            let displayLetter = (isShifted || isCapsLocked) ? letter.uppercased() : letter.lowercased()
             let button = createKeyButton(title: displayLetter, action: #selector(letterKeyPressed(_:)))
             // Store the original lowercase letter for input logic
             button.accessibilityIdentifier = letter.lowercased()
@@ -605,6 +605,9 @@ class KeyboardViewController: UIInputViewController {
         isShifted = false
         isCapsLocked = false
         
+        // Check auto-capitalization after language switch
+        checkAutoCapitalization()
+        
         // Update space button title to show current language
         updateSpaceButtonTitle()
         
@@ -665,9 +668,9 @@ class KeyboardViewController: UIInputViewController {
     private func showSoftSignPopup(above button: UIButton) {
         hidePopup()
         
-        // Always display uppercase in popup
-        let option1 = "Ь"
-        let option2 = "Ъ"
+        // Display popup options based on shift/caps state
+        let option1 = (isShifted || isCapsLocked) ? "Ь" : "ь"
+        let option2 = (isShifted || isCapsLocked) ? "Ъ" : "ъ"
         
         let backdrop = UIView(frame: view.bounds)
         backdrop.backgroundColor = UIColor.clear
