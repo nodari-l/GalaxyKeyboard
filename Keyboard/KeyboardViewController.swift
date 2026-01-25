@@ -19,6 +19,9 @@ class KeyboardViewController: UIInputViewController {
     private var letterButtons: [UIButton] = []
     private var lastShiftPressTime: TimeInterval = 0
     
+    // Auto-capitalization state
+    private var shouldAutoCapitalize = false
+    
     // Language support
     private var currentLanguage: KeyboardLanguage = .english
     private var spaceButton: UIButton?
@@ -73,11 +76,13 @@ class KeyboardViewController: UIInputViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupKeyboard()
+        checkAutoCapitalization()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         updateInputModeSwitchKeyVisibility()
+        checkAutoCapitalization()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -501,6 +506,11 @@ class KeyboardViewController: UIInputViewController {
         
         textDocumentProxy.insertText(text)
         
+        // Turn off auto-capitalization after typing a letter
+        if shouldAutoCapitalize {
+            shouldAutoCapitalize = false
+        }
+        
         if isShifted && !isCapsLocked {
             isShifted = false
             updateShiftState()
@@ -534,11 +544,13 @@ class KeyboardViewController: UIInputViewController {
     
     @objc private func deletePressed() {
         textDocumentProxy.deleteBackward()
+        checkAutoCapitalization()
     }
     
     @objc private func deleteTouchDown(_ sender: UIButton) {
         // Immediately delete one character
         textDocumentProxy.deleteBackward()
+        checkAutoCapitalization()
         
         // Start repeating after a delay
         deleteTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { _ in
@@ -554,6 +566,7 @@ class KeyboardViewController: UIInputViewController {
         deleteTimer?.invalidate()
         deleteTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
             self.textDocumentProxy.deleteBackward()
+            self.checkAutoCapitalization()
         }
     }
     
@@ -564,6 +577,7 @@ class KeyboardViewController: UIInputViewController {
     
     @objc private func spacePressed() {
         textDocumentProxy.insertText(" ")
+        checkAutoCapitalization()
     }
     
     private func setupSpaceButtonGestures(_ button: UIButton) {
@@ -604,6 +618,7 @@ class KeyboardViewController: UIInputViewController {
     
     @objc private func returnPressed() {
         textDocumentProxy.insertText("\n")
+        checkAutoCapitalization()
     }
     
     @objc private func toggleSymbolsMode() {
@@ -622,11 +637,21 @@ class KeyboardViewController: UIInputViewController {
     @objc private func symbolRowKeyPressed(_ sender: UIButton) {
         guard let title = sender.currentTitle else { return }
         textDocumentProxy.insertText(title)
+        
+        // Check auto-capitalization for dots
+        if title.contains(".") {
+            checkAutoCapitalization()
+        }
     }
     
     @objc private func punctuationKeyPressed(_ sender: UIButton) {
         guard let title = sender.currentTitle else { return }
         textDocumentProxy.insertText(title)
+        
+        // Check auto-capitalization for dots
+        if title.contains(".") {
+            checkAutoCapitalization()
+        }
     }
     
     @objc private func softSignLongPressed(_ gesture: UILongPressGestureRecognizer) {
@@ -784,6 +809,57 @@ class KeyboardViewController: UIInputViewController {
         
         for subview in view.subviews {
             updateColorsRecursively(in: subview, keyColor: keyColor, specialKeyColor: specialKeyColor, textColor: textColor)
+        }
+    }
+    
+    // MARK: - Auto-capitalization
+    
+    private func checkAutoCapitalization() {
+        // Don't auto-capitalize in symbols mode
+        guard !isSymbolsMode else {
+            shouldAutoCapitalize = false
+            updateAutoCapitalizationState()
+            return
+        }
+        
+        guard let documentContext = textDocumentProxy.documentContextBeforeInput else {
+            // Beginning of text input
+            shouldAutoCapitalize = true
+            updateAutoCapitalizationState()
+            return
+        }
+        
+        // Check if we're at the very beginning (empty or only whitespace)
+        let trimmed = documentContext.trimmingCharacters(in: .whitespacesAndNewlines)
+        if trimmed.isEmpty {
+            shouldAutoCapitalize = true
+            updateAutoCapitalizationState()
+            return
+        }
+        
+        // Check if we're at the beginning of a new line
+        if documentContext.hasSuffix("\n") {
+            shouldAutoCapitalize = true
+            updateAutoCapitalizationState()
+            return
+        }
+        
+        // Check if the last non-whitespace characters are dots followed by whitespace
+        let dotPattern = #"\.+\s+$"#
+        if documentContext.range(of: dotPattern, options: .regularExpression) != nil {
+            shouldAutoCapitalize = true
+            updateAutoCapitalizationState()
+            return
+        }
+        
+        shouldAutoCapitalize = false
+        updateAutoCapitalizationState()
+    }
+    
+    private func updateAutoCapitalizationState() {
+        if shouldAutoCapitalize && !isShifted && !isCapsLocked {
+            isShifted = true
+            updateShiftState()
         }
     }
 }
