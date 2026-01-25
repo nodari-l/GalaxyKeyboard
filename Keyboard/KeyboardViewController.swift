@@ -91,6 +91,9 @@ class KeyboardViewController: UIInputViewController {
     }
     
     private func setupKeyboard() {
+        // Stop any ongoing delete repeat
+        stopDeleteRepeat()
+        
         // Remove all subviews first
         view.subviews.forEach { $0.removeFromSuperview() }
         letterButtons.removeAll()
@@ -394,10 +397,6 @@ class KeyboardViewController: UIInputViewController {
         button.addTarget(self, action: #selector(deleteTouchUp(_:)), for: .touchUpInside)
         button.addTarget(self, action: #selector(deleteTouchUp(_:)), for: .touchUpOutside)
         button.addTarget(self, action: #selector(deleteTouchUp(_:)), for: .touchCancel)
-        button.addTarget(self, action: #selector(keyTouchDown(_:)), for: .touchDown)
-        button.addTarget(self, action: #selector(keyTouchUp(_:)), for: .touchUpInside)
-        button.addTarget(self, action: #selector(keyTouchUp(_:)), for: .touchUpOutside)
-        button.addTarget(self, action: #selector(keyTouchUp(_:)), for: .touchCancel)
         let heightConstraint = button.heightAnchor.constraint(equalToConstant: Self.keyHeight)
         heightConstraint.priority = .required
         heightConstraint.isActive = true
