@@ -9,6 +9,9 @@ import UIKit
 
 class KeyboardViewController: UIInputViewController {
     
+    // Key dimensions
+    private static let keyHeight: CGFloat = 45
+    
     private var isShifted = false
     private var isCapsLocked = false
     private var isSymbolsMode = false
@@ -20,6 +23,7 @@ class KeyboardViewController: UIInputViewController {
     private var currentLanguage: KeyboardLanguage = .english
     private var spaceButton: UIButton?
     private var shiftButton: UIButton?
+    private var nextKeyboardButton: UIButton?
     
     // Long-press popup
     private var popupView: UIView?
@@ -71,6 +75,11 @@ class KeyboardViewController: UIInputViewController {
         setupKeyboard()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        updateInputModeSwitchKeyVisibility()
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         stopDeleteRepeat()
@@ -92,7 +101,7 @@ class KeyboardViewController: UIInputViewController {
             stackView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8),
             stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 4),
             stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -4),
-            stackView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -8)
+            stackView.bottomAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -8)
         ])
         
         // Number row (always present)
@@ -136,6 +145,16 @@ class KeyboardViewController: UIInputViewController {
             stackView.addArrangedSubview(thirdRow)
             stackView.addArrangedSubview(bottomRow)
         }
+
+        if view.window != nil {
+            updateInputModeSwitchKeyVisibility()
+        } else {
+            nextKeyboardButton?.isHidden = true
+        }
+    }
+
+    private func updateInputModeSwitchKeyVisibility() {
+        nextKeyboardButton?.isHidden = !needsInputModeSwitchKey
     }
     
     private func createNumberRow() -> UIStackView {
@@ -300,8 +319,9 @@ class KeyboardViewController: UIInputViewController {
         returnButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
         
         let nextKeyboardButton = createSpecialButton(title: "🌐", action: #selector(handleInputModeList(from:with:)))
+        self.nextKeyboardButton = nextKeyboardButton
         nextKeyboardButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
-        nextKeyboardButton.isHidden = !needsInputModeSwitchKey
+        nextKeyboardButton.isHidden = true
         
         stackView.addArrangedSubview(symbolButton)
         stackView.addArrangedSubview(commaButton)
@@ -328,7 +348,9 @@ class KeyboardViewController: UIInputViewController {
         button.addTarget(self, action: #selector(keyTouchUp(_:)), for: .touchUpInside)
         button.addTarget(self, action: #selector(keyTouchUp(_:)), for: .touchUpOutside)
         button.addTarget(self, action: #selector(keyTouchUp(_:)), for: .touchCancel)
-        button.heightAnchor.constraint(equalToConstant: 45).isActive = true
+        let heightConstraint = button.heightAnchor.constraint(equalToConstant: Self.keyHeight)
+        heightConstraint.priority = .required
+        heightConstraint.isActive = true
         return button
     }
     
@@ -347,7 +369,9 @@ class KeyboardViewController: UIInputViewController {
         button.addTarget(self, action: #selector(keyTouchUp(_:)), for: .touchUpInside)
         button.addTarget(self, action: #selector(keyTouchUp(_:)), for: .touchUpOutside)
         button.addTarget(self, action: #selector(keyTouchUp(_:)), for: .touchCancel)
-        button.heightAnchor.constraint(equalToConstant: 45).isActive = true
+        let heightConstraint = button.heightAnchor.constraint(equalToConstant: Self.keyHeight)
+        heightConstraint.priority = .required
+        heightConstraint.isActive = true
         return button
     }
     
@@ -369,7 +393,9 @@ class KeyboardViewController: UIInputViewController {
         button.addTarget(self, action: #selector(keyTouchUp(_:)), for: .touchUpInside)
         button.addTarget(self, action: #selector(keyTouchUp(_:)), for: .touchUpOutside)
         button.addTarget(self, action: #selector(keyTouchUp(_:)), for: .touchCancel)
-        button.heightAnchor.constraint(equalToConstant: 45).isActive = true
+        let heightConstraint = button.heightAnchor.constraint(equalToConstant: Self.keyHeight)
+        heightConstraint.priority = .required
+        heightConstraint.isActive = true
         return button
     }
     
