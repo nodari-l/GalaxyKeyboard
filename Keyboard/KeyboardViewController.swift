@@ -10,6 +10,7 @@ import UIKit
 class KeyboardViewController: UIInputViewController {
     
     // Key dimensions
+    
     private static let keyHeight: CGFloat = 45
     
     private var isShifted = false
