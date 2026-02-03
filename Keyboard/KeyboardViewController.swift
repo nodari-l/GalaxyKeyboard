@@ -10,6 +10,7 @@ import UIKit
 class KeyboardViewController: UIInputViewController {
     
     // Key dimensions
+    
     private static let keyHeight: CGFloat = 45
     
     private var isShifted = false
@@ -94,7 +95,6 @@ class KeyboardViewController: UIInputViewController {
         // Stop any ongoing delete repeat
         stopDeleteRepeat()
         
-        // Remove all subviews first
         view.subviews.forEach { $0.removeFromSuperview() }
         letterButtons.removeAll()
         
@@ -194,18 +194,21 @@ class KeyboardViewController: UIInputViewController {
             // Store the original lowercase letter for input logic
             button.accessibilityIdentifier = letter.lowercased()
             
-            // Add long-press for ь key in Russian keyboard
-            if currentLanguage == .russian && (letter.lowercased() == "ь") {
-                let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(softSignLongPressed(_:)))
-                longPressGesture.minimumPressDuration = 0.5
-                button.addGestureRecognizer(longPressGesture)
-            }
+            addSoftSignLongPressIfNeeded(to: button, letter: letter)
             
             letterButtons.append(button)
             stackView.addArrangedSubview(button)
         }
         
         return stackView
+    }
+    
+    private func addSoftSignLongPressIfNeeded(to button: UIButton, letter: String) {
+        if currentLanguage == .russian && letter.lowercased() == "ь" {
+            let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(softSignLongPressed(_:)))
+            longPressGesture.minimumPressDuration = 0.5
+            button.addGestureRecognizer(longPressGesture)
+        }
     }
     
     private func createSymbolRow(_ symbols: [String]) -> UIStackView {
@@ -282,15 +285,9 @@ class KeyboardViewController: UIInputViewController {
             // Display letters based on shift/caps state
             let displayLetter = (isShifted || isCapsLocked) ? letter.uppercased() : letter.lowercased()
             let button = createKeyButton(title: displayLetter, action: #selector(letterKeyPressed(_:)))
-            // Store the original lowercase letter for input logic
             button.accessibilityIdentifier = letter.lowercased()
             
-            // Add long-press for ь key in Russian keyboard
-            if currentLanguage == .russian && (letter.lowercased() == "ь") {
-                let longPressGesture = UILongPressGestureRecognizer(target: self, action: #selector(softSignLongPressed(_:)))
-                longPressGesture.minimumPressDuration = 0.5
-                button.addGestureRecognizer(longPressGesture)
-            }
+            addSoftSignLongPressIfNeeded(to: button, letter: letter)
             
             letterButtons.append(button)
             stackView.addArrangedSubview(button)
@@ -316,7 +313,7 @@ class KeyboardViewController: UIInputViewController {
         let commaButton = createKeyButton(title: ",", action: #selector(punctuationKeyPressed(_:)))
         commaButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
         
-        let spaceButton = createSpecialButton(title: "\(currentLanguage.displayName)", action: #selector(spacePressed))
+        let spaceButton = createSpecialButton(title: "\(currentLanguage.displayName) space", action: #selector(spacePressed))
         self.spaceButton = spaceButton
         setupSpaceButtonGestures(spaceButton)
         
@@ -351,6 +348,8 @@ class KeyboardViewController: UIInputViewController {
         button.layer.shadowOffset = CGSize(width: 0, height: 1)
         button.layer.shadowOpacity = 0.3
         button.layer.shadowRadius = 0
+        button.layer.shouldRasterize = true
+        button.layer.rasterizationScale = UIScreen.main.scale
         button.addTarget(self, action: action, for: .touchUpInside)
         button.addTarget(self, action: #selector(keyTouchDown(_:)), for: .touchDown)
         button.addTarget(self, action: #selector(keyTouchUp(_:)), for: .touchUpInside)
@@ -372,6 +371,8 @@ class KeyboardViewController: UIInputViewController {
         button.layer.shadowOffset = CGSize(width: 0, height: 1)
         button.layer.shadowOpacity = 0.3
         button.layer.shadowRadius = 0
+        button.layer.shouldRasterize = true
+        button.layer.rasterizationScale = UIScreen.main.scale
         button.addTarget(self, action: action, for: .touchUpInside)
         button.addTarget(self, action: #selector(keyTouchDown(_:)), for: .touchDown)
         button.addTarget(self, action: #selector(keyTouchUp(_:)), for: .touchUpInside)
@@ -393,6 +394,8 @@ class KeyboardViewController: UIInputViewController {
         button.layer.shadowOffset = CGSize(width: 0, height: 1)
         button.layer.shadowOpacity = 0.3
         button.layer.shadowRadius = 0
+        button.layer.shouldRasterize = true
+        button.layer.rasterizationScale = UIScreen.main.scale
         button.addTarget(self, action: #selector(deleteTouchDown(_:)), for: .touchDown)
         button.addTarget(self, action: #selector(deleteTouchUp(_:)), for: .touchUpInside)
         button.addTarget(self, action: #selector(deleteTouchUp(_:)), for: .touchUpOutside)
@@ -418,7 +421,7 @@ class KeyboardViewController: UIInputViewController {
         guard let buttonTitle = button.currentTitle else { return }
         
         // Don't show preview for certain special keys
-        if buttonTitle == "🌐" || buttonTitle == "⇧" || buttonTitle == "⌫" || buttonTitle == "↵" || buttonTitle.contains("space") || buttonTitle == "EN" || buttonTitle == "РУ" || buttonTitle == "!#1" || buttonTitle == "1/2" {
+        if buttonTitle == "🌐" || buttonTitle == "⇧" || buttonTitle == "⌫" || buttonTitle == "↵" || buttonTitle.contains("space") || buttonTitle == "EN" || buttonTitle == "РУ" || buttonTitle == "!#1" || buttonTitle == "1/2" || buttonTitle == "ABC" || buttonTitle == "2/2" {
             return
         }
         
@@ -547,13 +550,13 @@ class KeyboardViewController: UIInputViewController {
     }
     
     @objc private func deleteTouchDown(_ sender: UIButton) {
-        // Immediately delete one character
+        deleteTimer?.invalidate()
+        
         textDocumentProxy.deleteBackward()
         checkAutoCapitalization()
         
-        // Start repeating after a delay
-        deleteTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { _ in
-            self.startDeleteRepeat()
+        deleteTimer = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: false) { [weak self] _ in
+            self?.startDeleteRepeat()
         }
     }
     
@@ -563,9 +566,9 @@ class KeyboardViewController: UIInputViewController {
     
     private func startDeleteRepeat() {
         deleteTimer?.invalidate()
-        deleteTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { _ in
-            self.textDocumentProxy.deleteBackward()
-            self.checkAutoCapitalization()
+        deleteTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
+            self?.textDocumentProxy.deleteBackward()
+            self?.checkAutoCapitalization()
         }
     }
     
@@ -600,18 +603,12 @@ class KeyboardViewController: UIInputViewController {
     private func switchLanguage() {
         currentLanguage = (currentLanguage == .english) ? .russian : .english
         
-        // Reset shift and caps lock when switching languages
         isShifted = false
         isCapsLocked = false
         
-        // Check auto-capitalization after language switch
-        checkAutoCapitalization()
-        
-        // Update space button title to show current language
-        updateSpaceButtonTitle()
-        
-        // Rebuild keyboard with new language
         setupKeyboard()
+        
+        checkAutoCapitalization()
     }
     
     private func updateSpaceButtonTitle() {
@@ -625,15 +622,13 @@ class KeyboardViewController: UIInputViewController {
     
     @objc private func toggleSymbolsMode() {
         isSymbolsMode.toggle()
-        isExtendedSymbolsMode = false // Reset extended symbols when switching modes
+        isExtendedSymbolsMode = false
         setupKeyboard()
-        updateAppearance()
     }
     
     @objc private func toggleExtendedSymbols() {
         isExtendedSymbolsMode.toggle()
         setupKeyboard()
-        updateAppearance()
     }
     
     @objc private func symbolRowKeyPressed(_ sender: UIButton) {
@@ -799,7 +794,7 @@ class KeyboardViewController: UIInputViewController {
             if let title = button.currentTitle {
                 if title == "⇧" {
                     updateShiftButtonAppearance()
-                } else if title == "⌫" || title == "🌐" || title.contains("space") || title == "return" || title == "↵" || title == "ABC" || title == "1/2" || title == "2/2" || title == "!#1" {
+                } else if title == "⌫" || title == "🌐" || title.contains("space") || title == "↵" || title == "ABC" || title == "1/2" || title == "2/2" || title == "!#1" {
                     button.backgroundColor = specialKeyColor
                     button.setTitleColor(textColor, for: .normal)
                 } else {
