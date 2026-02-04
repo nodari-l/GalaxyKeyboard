@@ -20,6 +20,13 @@ class KeyboardViewController: UIInputViewController {
     private var letterButtons: [UIButton] = []
     private var lastShiftPressTime: TimeInterval = 0
     
+    // Touch detection configuration
+    private var touchConfig = TouchDetectionConfig()
+    private var touchHandler: KeyboardTouchHandler?
+    
+    // Track active touches to prevent duplicate triggers
+    private var activeTouches: [UITouch: UIButton] = [:]
+    
     // Auto-capitalization state
     private var shouldAutoCapitalize = false
     
@@ -159,10 +166,31 @@ class KeyboardViewController: UIInputViewController {
         } else {
             nextKeyboardButton?.isHidden = true
         }
+        
+        initializeTouchHandler()
     }
 
     private func updateInputModeSwitchKeyVisibility() {
         nextKeyboardButton?.isHidden = !needsInputModeSwitchKey
+    }
+    
+    private func initializeTouchHandler() {
+        let allButtons = collectAllButtons(from: view)
+        touchHandler = KeyboardTouchHandler(config: touchConfig, allButtons: allButtons)
+    }
+    
+    private func collectAllButtons(from view: UIView) -> [UIButton] {
+        var buttons: [UIButton] = []
+        
+        if let button = view as? UIButton {
+            buttons.append(button)
+        }
+        
+        for subview in view.subviews {
+            buttons.append(contentsOf: collectAllButtons(from: subview))
+        }
+        
+        return buttons
     }
     
     private func createNumberRow() -> UIStackView {
@@ -174,7 +202,7 @@ class KeyboardViewController: UIInputViewController {
         let numbers = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"]
         
         for number in numbers {
-            let button = createKeyButton(title: number, action: #selector(numberKeyPressed(_:)))
+            let button = createKeyButton(title: number, action: #selector(numberKeyPressed(_:)), keyType: .number)
             stackView.addArrangedSubview(button)
         }
         
@@ -218,7 +246,7 @@ class KeyboardViewController: UIInputViewController {
         stackView.spacing = 6
         
         for symbol in symbols {
-            let button = createKeyButton(title: symbol, action: #selector(symbolRowKeyPressed(_:)))
+            let button = createKeyButton(title: symbol, action: #selector(symbolRowKeyPressed(_:)), keyType: .symbol)
             stackView.addArrangedSubview(button)
         }
         
@@ -237,10 +265,10 @@ class KeyboardViewController: UIInputViewController {
                 let deleteButton = createDeleteButton(title: symbol)
                 stackView.addArrangedSubview(deleteButton)
             } else if symbol == "1/2" {
-                let toggleButton = createKeyButton(title: symbol, action: #selector(toggleExtendedSymbols))
+                let toggleButton = createKeyButton(title: symbol, action: #selector(toggleExtendedSymbols), keyType: .modifier)
                 stackView.addArrangedSubview(toggleButton)
             } else {
-                let button = createKeyButton(title: symbol, action: #selector(symbolRowKeyPressed(_:)))
+                let button = createKeyButton(title: symbol, action: #selector(symbolRowKeyPressed(_:)), keyType: .symbol)
                 stackView.addArrangedSubview(button)
             }
         }
@@ -260,10 +288,10 @@ class KeyboardViewController: UIInputViewController {
                 let deleteButton = createDeleteButton(title: symbol)
                 stackView.addArrangedSubview(deleteButton)
             } else if symbol == "2/2" {
-                let toggleButton = createKeyButton(title: symbol, action: #selector(toggleExtendedSymbols))
+                let toggleButton = createKeyButton(title: symbol, action: #selector(toggleExtendedSymbols), keyType: .modifier)
                 stackView.addArrangedSubview(toggleButton)
             } else {
-                let button = createKeyButton(title: symbol, action: #selector(symbolRowKeyPressed(_:)))
+                let button = createKeyButton(title: symbol, action: #selector(symbolRowKeyPressed(_:)), keyType: .symbol)
                 stackView.addArrangedSubview(button)
             }
         }
@@ -307,23 +335,23 @@ class KeyboardViewController: UIInputViewController {
         stackView.spacing = 6
         
         let symbolButtonTitle = isSymbolsMode ? "ABC" : "!#1"
-        let symbolButton = createKeyButton(title: symbolButtonTitle, action: #selector(toggleSymbolsMode))
+        let symbolButton = createKeyButton(title: symbolButtonTitle, action: #selector(toggleSymbolsMode), keyType: .modifier)
         symbolButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
         
-        let commaButton = createKeyButton(title: ",", action: #selector(punctuationKeyPressed(_:)))
+        let commaButton = createKeyButton(title: ",", action: #selector(punctuationKeyPressed(_:)), keyType: .symbol)
         commaButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
         
-        let spaceButton = createSpecialButton(title: "\(currentLanguage.displayName) space", action: #selector(spacePressed))
+        let spaceButton = createSpecialButton(title: "\(currentLanguage.displayName) space", action: #selector(spacePressed), keyType: .spacebar)
         self.spaceButton = spaceButton
         setupSpaceButtonGestures(spaceButton)
         
-        let dotButton = createKeyButton(title: ".", action: #selector(punctuationKeyPressed(_:)))
+        let dotButton = createKeyButton(title: ".", action: #selector(punctuationKeyPressed(_:)), keyType: .symbol)
         dotButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
         
-        let returnButton = createSpecialButton(title: "↵", action: #selector(returnPressed))
+        let returnButton = createSpecialButton(title: "↵", action: #selector(returnPressed), keyType: .modifier)
         returnButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
         
-        let nextKeyboardButton = createSpecialButton(title: "🌐", action: #selector(handleInputModeList(from:with:)))
+        let nextKeyboardButton = createSpecialButton(title: "🌐", action: #selector(handleInputModeList(from:with:)), keyType: .modifier)
         self.nextKeyboardButton = nextKeyboardButton
         nextKeyboardButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
         nextKeyboardButton.isHidden = true
@@ -338,8 +366,10 @@ class KeyboardViewController: UIInputViewController {
         return stackView
     }
     
-    private func createKeyButton(title: String, action: Selector) -> UIButton {
-        let button = UIButton(type: .system)
+    private func createKeyButton(title: String, action: Selector, keyType: TouchableKeyButton.KeyType = .letter) -> UIButton {
+        let button = TouchableKeyButton(type: .system)
+        button.keyType = keyType
+        button.config = touchConfig
         button.setTitle(title, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 18)
         button.backgroundColor = UIColor.white
@@ -361,8 +391,10 @@ class KeyboardViewController: UIInputViewController {
         return button
     }
     
-    private func createSpecialButton(title: String, action: Selector) -> UIButton {
-        let button = UIButton(type: .system)
+    private func createSpecialButton(title: String, action: Selector, keyType: TouchableKeyButton.KeyType = .modifier) -> UIButton {
+        let button = TouchableKeyButton(type: .system)
+        button.keyType = keyType
+        button.config = touchConfig
         button.setTitle(title, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         button.backgroundColor = UIColor.systemGray3
@@ -385,7 +417,9 @@ class KeyboardViewController: UIInputViewController {
     }
     
     private func createDeleteButton(title: String) -> UIButton {
-        let button = UIButton(type: .system)
+        let button = TouchableKeyButton(type: .system)
+        button.keyType = .modifier
+        button.config = touchConfig
         button.setTitle(title, for: .normal)
         button.titleLabel?.font = UIFont.systemFont(ofSize: 16)
         button.backgroundColor = UIColor.systemGray3
@@ -857,6 +891,82 @@ class KeyboardViewController: UIInputViewController {
         if shouldAutoCapitalize && !isShifted && !isCapsLocked {
             isShifted = true
             updateShiftState()
+        }
+    }
+    
+    // MARK: - Touch Event Handling
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        
+        guard let touchHandler = touchHandler else { return }
+        
+        for touch in touches {
+            let location = touch.location(in: view)
+            
+            if let button = touchHandler.handleTouch(at: location, in: view) {
+                if activeTouches[touch] == nil {
+                    activeTouches[touch] = button
+                    
+                    button.sendActions(for: .touchDown)
+                    showKeyPreview(for: button)
+                }
+            }
+        }
+    }
+    
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesMoved(touches, with: event)
+        
+        guard let touchHandler = touchHandler else { return }
+        
+        for touch in touches {
+            let location = touch.location(in: view)
+            
+            if let newButton = touchHandler.handleTouch(at: location, in: view) {
+                let previousButton = activeTouches[touch]
+                
+                if previousButton != newButton {
+                    if let previousButton = previousButton {
+                        previousButton.sendActions(for: .touchCancel)
+                        hideKeyPreview()
+                    }
+                    
+                    activeTouches[touch] = newButton
+                    newButton.sendActions(for: .touchDown)
+                    showKeyPreview(for: newButton)
+                }
+            } else {
+                if let previousButton = activeTouches[touch] {
+                    previousButton.sendActions(for: .touchCancel)
+                    hideKeyPreview()
+                    activeTouches[touch] = nil
+                }
+            }
+        }
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesEnded(touches, with: event)
+        
+        for touch in touches {
+            if let button = activeTouches[touch] {
+                button.sendActions(for: .touchUpInside)
+                hideKeyPreview()
+                activeTouches[touch] = nil
+            }
+        }
+    }
+    
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesCancelled(touches, with: event)
+        
+        for touch in touches {
+            if let button = activeTouches[touch] {
+                button.sendActions(for: .touchCancel)
+                hideKeyPreview()
+                activeTouches[touch] = nil
+            }
         }
     }
 }
